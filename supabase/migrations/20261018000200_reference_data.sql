@@ -1,20 +1,4 @@
-with p as (
-  insert into public.people (name) values
-    ('ראש תפעול א (דוגמה)'), ('ראש תפעול ב (דוגמה)'), ('אחראית מטבח (דוגמה)'), ('אחראי הזמנות (דוגמה)'),
-    ('the content lead'), ('Rav liaison'), ('בעלים (דוגמה)')
-  returning id, name
-)
-insert into public.person_roles (person_id, role)
-select id, case name
-  when 'ראש תפעול א (דוגמה)' then 'operating_heads'
-  when 'ראש תפעול ב (דוגמה)' then 'operating_heads'
-  when 'אחראית מטבח (דוגמה)' then 'kitchen'
-  when 'אחראי הזמנות (דוגמה)' then 'invitations'
-  when 'the content lead' then 'content'
-  when 'Rav liaison' then 'rav_liaison'
-  when 'בעלים (דוגמה)' then 'owner'
-end::public.role_key
-from p;
+-- Real people and their roles are NOT in the repo: see supabase/seeds/people.example.sql and docs/secrets.md.
 
 insert into public.task_templates (event_type, position, title, owner_role, due_offset_days, due_note) values
   ('feast', 1, 'שאלת הרב על נושא מוצע/מבוקש לסעודה ← דיווח לבעלים', 'rav_liaison', -28, null),

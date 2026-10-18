@@ -17,6 +17,7 @@ Hebrew, RTL, mobile-first event dashboard for Hasulam. Next.js App Router + Supa
 ```
 supabase/migrations/   schema, RLS, reference data (source of truth)
 supabase/seed.sql      local-only dev users and a test feast
+supabase/seeds/        people.example.sql template; private/ is git-ignored (real names)
 supabase/tests/        RLS tests (real Postgres)
 src/app/               routes and server actions (thin)
 src/components/<Name>/ Name.tsx, Name.module.css, types.ts, index.ts

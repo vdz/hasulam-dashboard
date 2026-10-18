@@ -8,3 +8,4 @@ playwright-report
 supabase/.branches
 supabase/.temp
 /evidence
+supabase/seeds/private/

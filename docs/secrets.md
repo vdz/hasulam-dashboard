@@ -31,3 +31,12 @@ in the local/CI database (seed is never applied to the cloud project), and dev s
 `DEV_LOGIN_ENABLED`.
 
 The Vercel project does not exist yet; set the variables above when it is created.
+
+## Real people (private seed)
+
+Real stakeholder names and roles are personal data and never live in the repo (it is public).
+- Committed template: `supabase/seeds/people.example.sql` (placeholder rows).
+- Private file: `supabase/seeds/private/people.sql` (git-ignored, kept only on The Lab).
+  `supabase/config.toml` seeds `./seed.sql` then `./seeds/private/*.sql`, so a local reset loads it when present;
+  without it, the app and tests run on the dev users only.
+- Cloud project: run the private file once in the Supabase SQL editor; never add it to a migration.
