@@ -1,0 +1,25 @@
+export const he = {
+  app: { title: 'הסולם – לוח אירועים' },
+  signIn: {
+    title: 'כניסה',
+    email: 'אימייל',
+    password: 'סיסמה',
+    submit: 'כניסה',
+    failed: 'הכניסה נכשלה. בדקו את הפרטים ונסו שוב.',
+    denied: 'אין לך הרשאה לעמוד הזה.',
+    googleSoon: 'כניסה עם Google תתווסף בקרוב.',
+  },
+  myTasks: {
+    title: 'המשימות שלי',
+    greeting: 'שלום {{name}}',
+    empty: 'אין משימות עבורך כרגע.',
+    markDone: 'סמן כבוצע',
+    markOpen: 'החזר לפתוחה',
+    done: 'בוצע',
+    open: 'פתוחה',
+    notApplicable: 'לא רלוונטי',
+    dueDate: 'עד {{date}}',
+    dueUnknown: 'מועד: לא ידוע',
+    signOut: 'יציאה',
+  },
+} as const;

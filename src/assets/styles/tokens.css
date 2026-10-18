@@ -1,0 +1,14 @@
+:root {
+  --color-bg: #f7f5f0;
+  --color-surface: #ffffff;
+  --color-text: #1d1d1b;
+  --color-muted: #6b6b66;
+  --color-accent: #1f5f8b;
+  --color-done: #2e7d32;
+  --color-border: #e2ded5;
+  --radius: 12px;
+  --space: 12px;
+  --tap: 48px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: system-ui, "Segoe UI", Arial, sans-serif; font-size: 17px; }
