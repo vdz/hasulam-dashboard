@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { refreshSession } from '@/lib/db/session';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   return refreshSession(request);
 }
 
