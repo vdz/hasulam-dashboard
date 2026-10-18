@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run db:start
+      - name: Write local env
+        run: |
+          echo "NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321" >> .env.local
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$(npx supabase status -o env | grep '^ANON_KEY=' | cut -d'"' -f2)" >> .env.local
+          echo "DEV_LOGIN_ENABLED=true" >> .env.local
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-evidence
+          path: test-results/
+          if-no-files-found: ignore

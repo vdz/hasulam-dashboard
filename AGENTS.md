@@ -43,4 +43,5 @@ e2e/                   Playwright smoke
 | One `requireRole()` gate for pages and actions | `src/lib/db/viewer.ts` |
 | Outbound messages are Draft rows; approval needs an approver | `drafts` grants + check constraint |
 | Dev login never in production | `src/env.ts` refuses `DEV_LOGIN_ENABLED` with `VERCEL_ENV=production` |
+| No secrets in repo or client bundle; server env via `serverEnv()` only (see `docs/secrets.md`) | `.gitignore`, ESLint `no-restricted-syntax`, `import 'server-only'` in `src/env.ts`, `npm run secrets:check` |
 | Never contact stakeholders without the owner's OK | no send path exists in code |

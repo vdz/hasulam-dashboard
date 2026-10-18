@@ -18,7 +18,8 @@
     "db:types": "supabase gen types typescript --local --schema public > src/lib/db/types.gen.ts",
     "db:types:check": "node scripts/check-types-drift.mjs",
     "e2e": "playwright test",
-    "check": "npm run typecheck && npm run lint && npm run test && npm run db:types:check && npm run test:rls && npm run build && npm run e2e"
+    "check": "npm run typecheck && npm run lint && npm run test && npm run db:types:check && npm run test:rls && npm run build && npm run secrets:check && npm run e2e",
+    "secrets:check": "node scripts/check-client-secrets.mjs --bundle"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

@@ -21,13 +21,23 @@ export default tseslint.config(
       '@eslint-community/eslint-comments/require-description': ['error', { ignore: [] }],
       '@eslint-community/eslint-comments/no-unlimited-disable': 'error',
       'no-restricted-imports': ['error', {
-        patterns: [{ group: ['@supabase/*'], message: 'Only src/lib/db/* may import the Supabase client.' }],
+        patterns: [
+          { group: ['@supabase/*'], message: 'Only src/lib/db/* may import the Supabase client.' },
+        ],
+      }],
+      'no-restricted-syntax': ['error', {
+        selector: "MemberExpression[object.object.name='process'][object.property.name='env'][property.name!=/^(NEXT_PUBLIC_|NODE_ENV$)/]",
+        message: 'Read server env only through serverEnv() in src/env.ts.',
       }],
     },
   },
   {
     files: ['src/lib/db/**'],
     rules: { 'no-restricted-imports': 'off' },
+  },
+  {
+    files: ['src/env.ts', 'e2e/**', 'supabase/**', 'scripts/**', '*.config.*'],
+    rules: { 'no-restricted-syntax': 'off' },
   },
   {
     files: ['**/*.config.*', 'scripts/**', 'eslint.config.mjs'],

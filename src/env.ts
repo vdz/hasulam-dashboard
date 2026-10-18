@@ -1,9 +1,13 @@
+import 'server-only';
 import { z } from 'zod';
 
 const publicSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
 });
+
+// Server-only names. Never prefix with NEXT_PUBLIC_; scripts/check-client-secrets.mjs enforces.
+export const SERVER_SECRET_NAMES = ['CALENDAR_KEEPER_WEBHOOK_URL', 'CALENDAR_KEEPER_WEBHOOK_KEY', 'SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_DB_URL'] as const;
 
 const serverSchema = publicSchema.extend({
   DEV_LOGIN_ENABLED: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
