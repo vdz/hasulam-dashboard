@@ -45,4 +45,5 @@ e2e/                   Playwright smoke
 | Outbound messages are Draft rows; approval needs an approver | `drafts` grants + check constraint |
 | Dev login never in production | `src/env.ts` refuses `DEV_LOGIN_ENABLED` with `VERCEL_ENV=production` |
 | No secrets in repo or client bundle; server env via `serverEnv()` only (see `docs/secrets.md`) | `.gitignore`, ESLint `no-restricted-syntax`, `import 'server-only'` in `src/env.ts`, `npm run secrets:check` |
+| Next 16 Cache Components: per-viewer data is never `'use cache'`; it streams inside `<Suspense>`; `dbClient()` calls `connection()` | `cacheComponents: true` (build fails on uncached data outside Suspense), `src/lib/db/client.ts` |
 | Never contact stakeholders without the owner's OK | no send path exists in code |
