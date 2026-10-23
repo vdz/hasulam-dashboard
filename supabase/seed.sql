@@ -17,13 +17,15 @@ select pg_temp.dev_user('dev-kitchen@hasulam.test', 'dev-password-kitchen');
 select pg_temp.dev_user('dev-heads@hasulam.test', 'dev-password-heads');
 select pg_temp.dev_user('dev-outsider@hasulam.test', 'dev-password-outsider');
 select pg_temp.dev_user('dev-chef@hasulam.test', 'dev-password-chef');
+select pg_temp.dev_user('dev-informed@hasulam.test', 'dev-password-informed');
 
 with p as (
   insert into public.people (name, email) values
     ('בודק בעלים', 'dev-owner@hasulam.test'),
     ('בודקת מטבח', 'dev-kitchen@hasulam.test'),
     ('בודק תפעול', 'dev-heads@hasulam.test'),
-    ('בודק בישול', 'dev-chef@hasulam.test')
+    ('בודק בישול', 'dev-chef@hasulam.test'),
+    ('בודקת מעודכנת', 'dev-informed@hasulam.test')
   returning id, email
 )
 insert into public.person_roles (person_id, role)
@@ -32,6 +34,7 @@ select id, case email
   when 'dev-kitchen@hasulam.test' then 'kitchen'
   when 'dev-heads@hasulam.test' then 'operating_heads'
   when 'dev-chef@hasulam.test' then 'chef'
+  when 'dev-informed@hasulam.test' then 'informed'
 end::public.role_key from p;
 
 insert into public.events (id, title, type, starts_at, has_food, year)

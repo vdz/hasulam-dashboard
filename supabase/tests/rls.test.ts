@@ -119,6 +119,22 @@ describe('role hierarchy: see below, edit only your own', () => {
     expect((await client.query(`select 1 from public.role_hierarchy`)).rowCount).toBe(0);
   });
 
+  it('shows an informed member every task but lets them edit none', async () => {
+    await as('dev-informed@hasulam.test');
+    expect(await visibleTasks()).toHaveLength(19);
+    await client.query('reset role');
+    for (const position of [2, 10, 15, 19]) {
+      expect(await markDone(position, 'dev-informed@hasulam.test')).toBe(0);
+      await client.query('reset role');
+    }
+  });
+
+  it('never lets informed own or be accountable for a task', async () => {
+    await expect(
+      client.query(`update public.tasks set accountable_role = 'informed' where event_id = 'dev-feast-1' and position = 10`),
+    ).rejects.toThrow(/no_informed_owner/);
+  });
+
   it('requires an accountable role whenever a task has owners', async () => {
     await expect(
       client.query(`update public.tasks set accountable_role = null where event_id = 'dev-feast-1' and position = 10`),

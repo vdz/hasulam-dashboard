@@ -15,6 +15,7 @@ Seeded dev users (local only, `supabase/seed.sql`):
 | dev-kitchen@hasulam.test | dev-password-kitchen | kitchen | owns 2, 10, 11, 19; sees + edits (accountable) 12, 13, 15, 16, 18 |
 | dev-heads@hasulam.test | dev-password-heads | operating_heads | owns 2, 8, 19; sees (read-only) everything below it except 1 (rav_liaison) |
 | dev-chef@hasulam.test | dev-password-chef | chef | 13, 15 |
+| dev-informed@hasulam.test | dev-password-informed | informed | all 19, read-only |
 | dev-outsider@hasulam.test | dev-password-outsider | none | nothing |
 
 ## Launch

@@ -47,4 +47,6 @@ Real stakeholder names and roles are personal data and never live in the repo (i
 - Private file: `supabase/seeds/private/people.sql` (git-ignored, kept only on The Lab).
   `supabase/config.toml` seeds `./seed.sql` then `./seeds/private/*.sql`, so a local reset loads it when present;
   without it, the app and tests run on the dev users only.
-- Cloud project: run the private file once in the Supabase SQL editor; never add it to a migration.
+- Cloud project: applied once (2026-10-23) through a temporary GitHub Action secret, deleted right after; never add it to a migration.
+
+Preview deploys share the production database (one free Supabase project): anything done on a preview is real data.
