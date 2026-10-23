@@ -5,15 +5,16 @@ description: Launch, drive, and prove the Hasulam event dashboard (Hebrew RTL Ne
 
 # Verify hasulam-dashboard
 
-Surface: mobile web UI (390x844, RTL Hebrew). Data: local Supabase in Docker with seeded dev users. No Google OAuth in verification: the dev sign-in form appears only when `DEV_LOGIN_ENABLED=true`.
+Surface: mobile web UI (390x844, RTL Hebrew). Data: local Supabase in Docker with seeded dev users. Production sign-in is Google only; verification uses the dev form, which appears only when `DEV_LOGIN_ENABLED=true` against a local Supabase.
 
 Seeded dev users (local only, `supabase/seed.sql`):
 
 | Email | Password | Role | Sees |
 | --- | --- | --- | --- |
 | dev-owner@hasulam.test | dev-password-owner | owner | all 19 tasks of `dev-feast-1` |
-| dev-kitchen@hasulam.test | dev-password-kitchen | kitchen | tasks 10, 11 |
-| dev-heads@hasulam.test | dev-password-heads | operating_heads | tasks 2, 8, 19 |
+| dev-kitchen@hasulam.test | dev-password-kitchen | kitchen | owns 2, 10, 11, 19; sees + edits (accountable) 12, 13, 15, 16, 18 |
+| dev-heads@hasulam.test | dev-password-heads | operating_heads | owns 2, 8, 19; sees (read-only) everything below it except 1 (rav_liaison) |
+| dev-chef@hasulam.test | dev-password-chef | chef | 13, 15 |
 | dev-outsider@hasulam.test | dev-password-outsider | none | nothing |
 
 ## Launch
@@ -39,7 +40,7 @@ Read-only. Checks docker, supabase, the 19 seeded tasks, that the app pid is our
 .cursor/skills/verify-hasulam-dashboard/scripts/drive.sh -g "marks one done"
 ```
 
-Playwright, chromium, viewport 390x844, locale he-IL. Handles are `data-testid`s: `sign-in-email`, `sign-in-password`, `sign-in-submit`, `my-tasks-title`, `task-item` (with `data-task-id`, `data-status`), `task-item-toggle` (with `data-next`), `my-tasks-sign-out`. New journeys go in `e2e/*.spec.ts`.
+Playwright, chromium, viewport 390x844, locale he-IL. Handles are `data-testid`s: `sign-in-email`, `sign-in-password`, `sign-in-submit`, `my-tasks-title`, `task-item` (with `data-task-id`, `data-status`), `task-item-toggle` (with `data-next`), `task-item-read-only`, `my-tasks-sign-out`, `sign-in-google`, `not-member`, `event-card` (`data-event-id`), `event-title`, `task-group` (`data-group` = `mine` | role | `unassigned`). New journeys go in `e2e/*.spec.ts`.
 
 ## Evidence
 

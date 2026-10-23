@@ -37,21 +37,22 @@ function dueLabel(due: TaskDue): string {
   }
 }
 
-export function TaskItem({ task }: TaskItemProps) {
+export function TaskItem({ task, context, editable }: TaskItemProps) {
   const due = taskDue({ eventStart: task.eventStart, offsetDays: task.dueOffsetDays, note: task.dueNote });
   const next = toggledStatus(task.status);
 
   return (
-    <li className={styles.item} data-testid="task-item" data-task-id={task.id} data-status={task.status}>
+    <li className={styles.item} data-testid="task-item" data-task-id={task.id} data-status={task.status} data-editable={editable}>
       <div className={styles.body}>
         <p className={styles.title} data-testid="task-item-title">{task.title}</p>
         <p className={styles.meta} data-testid="task-item-meta">
-          {task.eventTitle} · {dueLabel(due)}
+          {context} · {dueLabel(due)}
         </p>
         <span className={styles.status} data-testid="task-item-status" data-status={task.status}>
           {statusLabel(task.status)}
         </span>
       </div>
+      {editable ? (
       <form action={setStatusAction}>
         <input type="hidden" name="taskId" value={task.id} />
         <input type="hidden" name="status" value={next} />
@@ -59,6 +60,9 @@ export function TaskItem({ task }: TaskItemProps) {
           {next === 'done' ? text.myTasks.markDone : text.myTasks.markOpen}
         </button>
       </form>
+      ) : (
+        <span className={styles.readOnly} data-testid="task-item-read-only">{text.events.readOnly}</span>
+      )}
     </li>
   );
 }
