@@ -26,7 +26,7 @@ test('a stakeholder signs in, sees only their tasks, and marks one done', async 
   await expect(page.getByTestId('my-tasks-title')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   const items = page.getByTestId('task-item');
-  await expect(items).toHaveCount(2);
+  await expect(items).toHaveCount(4); // feast 2, 10, 11, 19 (kitchen is a co-owner of 2 and 19)
 
   const first = items.first();
   const id = await first.getAttribute('data-task-id');
