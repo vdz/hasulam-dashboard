@@ -14,9 +14,17 @@ const serverSchema = publicSchema.extend({
   CALENDAR_KEEPER_WEBHOOK_URL: z.url().optional(),
   CALENDAR_KEEPER_WEBHOOK_KEY: z.string().min(1).optional(),
   VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
-}).refine((env) => !(env.DEV_LOGIN_ENABLED && env.VERCEL_ENV === 'production'), {
-  message: 'DEV_LOGIN_ENABLED must never be true in Vercel production',
-});
+})
+  .refine((env) => !(env.DEV_LOGIN_ENABLED && env.VERCEL_ENV === 'production'), {
+    message: 'DEV_LOGIN_ENABLED must never be true in Vercel production',
+  })
+  .refine((env) => !(env.DEV_LOGIN_ENABLED && isCloudSupabase(env.NEXT_PUBLIC_SUPABASE_URL)), {
+    message: 'DEV_LOGIN_ENABLED only works against a local Supabase; the cloud project is Google sign-in only',
+  });
+
+function isCloudSupabase(url: string): boolean {
+  return new URL(url).hostname.endsWith('.supabase.co');
+}
 
 export type ServerEnv = z.infer<typeof serverSchema>;
 

@@ -5,8 +5,7 @@ import { z } from 'zod';
 import { taskStatusSchema } from '@/lib/db/enums';
 import { taskIdSchema } from '@/lib/db/ids';
 import { setTaskStatus } from '@/lib/db/tasks';
-import { requireRole, signOut } from '@/lib/db/viewer';
-import { redirect } from 'next/navigation';
+import { requireRole } from '@/lib/db/viewer';
 
 const setStatusInput = z.object({ taskId: taskIdSchema, status: taskStatusSchema });
 
@@ -16,9 +15,4 @@ export async function setStatusAction(formData: FormData): Promise<void> {
   const updated = await setTaskStatus({ viewer, taskId: input.taskId, status: input.status });
   if (!updated) throw new Error('task not found or not yours');
   revalidatePath('/tasks');
-}
-
-export async function signOutAction(): Promise<void> {
-  await signOut();
-  redirect('/signin');
 }

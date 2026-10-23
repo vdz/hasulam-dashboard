@@ -5,3 +5,6 @@
 .field { display: flex; flex-direction: column; gap: 6px; }
 .input { min-height: var(--tap); padding: 0 12px; border: 1px solid var(--color-border); border-radius: var(--radius); font-size: 17px; }
 .submit { min-height: var(--tap); border: 0; border-radius: var(--radius); background: var(--color-accent); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer; }
+.lead { margin: 0; color: var(--color-muted); }
+.google { width: 100%; min-height: var(--tap); display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid var(--color-border); border-radius: var(--radius); background: #fff; color: #1f1f1f; font-size: 17px; font-weight: 600; cursor: pointer; }
+.devLabel { margin: 16px 0 0; padding-top: 16px; border-top: 1px dashed var(--color-border); color: var(--color-muted); font-size: 14px; }

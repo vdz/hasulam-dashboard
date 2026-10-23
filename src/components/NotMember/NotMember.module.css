@@ -1,0 +1,5 @@
+.page { max-width: 420px; margin: 0 auto; padding: 24px 16px; display: flex; flex-direction: column; gap: 16px; }
+.title { margin: 0; font-size: 24px; }
+.body { margin: 0; color: var(--color-muted); line-height: 1.5; }
+.email { font-weight: 600; color: inherit; }
+.signOut { min-height: var(--tap); padding: 0 16px; border: 1px solid var(--color-border); border-radius: var(--radius); background: #fff; font-size: 16px; cursor: pointer; }

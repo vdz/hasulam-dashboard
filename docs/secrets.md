@@ -10,7 +10,7 @@ for non-`NEXT_PUBLIC_` names.
 | --- | --- | --- | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | public | `.env.local` (`http://127.0.0.1:54321`) | Vercel env | Vercel env | Vercel env | written from local Supabase, no secret |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | public (RLS protects data) | `.env.local` from `npx supabase status` | Vercel env | Vercel env | Vercel env | read from `supabase status`, no secret |
-| `DEV_LOGIN_ENABLED` | server | `true` | `true` | `true` only if preview uses a seeded DB | never set (env.ts refuses `true` in production) | `true` |
+| `DEV_LOGIN_ENABLED` | server | `true` | never (cloud DB) | never (cloud DB) | never set | `true` (local Supabase only; env.ts refuses it in production or against `*.supabase.co`) |
 | `CALENDAR_KEEPER_WEBHOOK_URL` | server-only | unset (dispatch is a no-op) | Vercel env (sensitive) | Vercel env (sensitive) | Vercel env (sensitive) | not needed |
 | `CALENDAR_KEEPER_WEBHOOK_KEY` | server-only, sender key for Calendar Keeper | unset | Vercel env (sensitive) | Vercel env (sensitive) | Vercel env (sensitive) | not needed |
 | `SUPABASE_DB_URL` | server-only, tests | defaults to local `postgres:postgres@127.0.0.1:54322` | - | - | - | defaults to local |
@@ -38,7 +38,7 @@ Local-only, not secrets: `supabase/seed.sql` dev users (`*@hasulam.test`, `dev-p
 in the local/CI database (seed is never applied to the cloud project), and dev sign-in is gated by
 `DEV_LOGIN_ENABLED`.
 
-The Vercel project does not exist yet; set the variables above when it is created.
+The Vercel project does not exist yet; see `docs/setup-google-and-vercel.md`.
 
 ## Real people (private seed)
 

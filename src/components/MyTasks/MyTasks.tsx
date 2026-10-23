@@ -1,5 +1,5 @@
 import { fill, text } from '@/assets/locales';
-import { signOutAction } from '@/app/tasks/actions';
+import { signOutAction } from '@/app/signin/actions';
 import { TaskItem } from '@/components/TaskItem';
 import styles from './MyTasks.module.css';
 import type { MyTasksProps } from './types';
