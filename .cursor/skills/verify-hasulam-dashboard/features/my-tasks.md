@@ -1,7 +1,7 @@
 # My tasks
 
 ## Sub-features
-- Lists only tasks whose `owner_role` is one of the viewer's roles; owner sees all.
+- Lists tasks whose `owner_roles` include one of the viewer's roles; owner sees all. (Tasks of roles below the viewer are visible on event pages, not here.)
 - Open tasks first, then by event date and template order.
 - Each card: title, event, due (date from offset, the due note, or "unknown"), status chip.
 - Toggle button marks done / back to open; writes `tasks.status` and `updated_by`.

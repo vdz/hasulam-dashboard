@@ -34,13 +34,13 @@ e2e/                   Playwright smoke
 
 | Rule | Enforced by |
 | --- | --- |
-| Migrations are the schema; types are generated | `db:types:check` in `check` |
+| Migrations are the schema; types are generated. New tables: `revoke all ... from anon, authenticated` first (Supabase default grants) | `db:types:check` in `check`, RLS tests |
 | Only `src/lib/db/*` imports `@supabase/*` | ESLint `no-restricted-imports` |
 | No `any`, no `as`, no floating promises, exhaustive switches | ESLint (`strictTypeChecked`, `switch-exhaustiveness-check`, `consistent-type-assertions`) |
 | Lint exceptions carry a reason and expiry | `scripts/check-lint-exceptions.mjs` (`-- reason expires YYYY-MM-DD`) |
 | Strict TS with `noUncheckedIndexedAccess` | `tsconfig.json` + `typecheck` |
 | Every boundary is parsed with Zod | `src/env.ts`, server actions, row schemas in `src/lib/db/*` |
-| Stakeholders see/mark only their role's tasks; owner sees all | RLS + column grants, `supabase/tests/rls.test.ts` |
+| A role sees its tasks and those of roles below it; edits only tasks it owns or is accountable for; owner sees all (`docs/role-hierarchy.md`) | RLS + column grants, `supabase/tests/rls.test.ts` |
 | One `requireRole()` gate for pages and actions | `src/lib/db/viewer.ts` |
 | Outbound messages are Draft rows; approval needs an approver | `drafts` grants + check constraint |
 | Google is the only sign-in; dev password login is local-only | `src/env.ts` refuses `DEV_LOGIN_ENABLED` with `VERCEL_ENV=production` or a `*.supabase.co` URL; setup in `docs/setup-google-and-vercel.md` |

@@ -17,11 +17,26 @@ async function as(email: string | null) {
   await client.query('set local role authenticated');
 }
 
-async function visibleTasks(): Promise<{ position: number; owner_role: string | null }[]> {
-  const { rows } = await client.query<{ position: number; owner_role: string | null }>(
-    `select position, owner_role from public.tasks where event_id = 'dev-feast-1' order by position`,
+async function visibleTasks(): Promise<{ position: number }[]> {
+  const { rows } = await client.query<{ position: number }>(
+    `select position from public.tasks where event_id = 'dev-feast-1' order by position`,
   );
   return rows;
+}
+
+async function personId(email: string): Promise<string> {
+  const { rows } = await client.query<{ id: string }>(`select id from public.people where email = $1`, [email]);
+  const id = rows[0]?.id;
+  if (id === undefined) throw new Error(`no person ${email}`);
+  return id;
+}
+
+async function markDone(position: number, email: string): Promise<number | null> {
+  const id = await taskId(position);
+  const me = await personId(email);
+  await as(email);
+  const { rowCount } = await client.query(`update public.tasks set status = 'done', updated_by = $2 where id = $1`, [id, me]);
+  return rowCount;
 }
 
 async function taskId(position: number): Promise<string> {
@@ -40,10 +55,22 @@ describe('task visibility', () => {
     expect(await visibleTasks()).toHaveLength(19);
   });
 
-  it('shows a stakeholder only the tasks of their own role', async () => {
+  it('shows a leaf role only the tasks it owns', async () => {
+    await as('dev-chef@hasulam.test');
+    expect((await visibleTasks()).map((r) => r.position)).toEqual([13, 15]);
+  });
+
+  it('shows a department head its own tasks plus every task of the roles below it', async () => {
     await as('dev-kitchen@hasulam.test');
-    const rows = await visibleTasks();
-    expect(rows.map((r) => r.position)).toEqual([10, 11]);
+    // own: 2, 19 (co-owner), 10, 11; below (chef, buyer, women_team, men_team): 12, 13, 15, 16, 18
+    expect((await visibleTasks()).map((r) => r.position)).toEqual([2, 10, 11, 12, 13, 15, 16, 18, 19]);
+  });
+
+  it('lets visibility cascade more than one level down', async () => {
+    await as('dev-heads@hasulam.test');
+    const positions = (await visibleTasks()).map((r) => r.position);
+    expect(positions).toEqual(expect.arrayContaining([2, 4, 5, 8, 10, 15, 18, 19]));
+    expect(positions).not.toContain(1); // rav_liaison reports to the owner, not to the operating heads
   });
 
   it('shows nothing to a signed-in user who is not a known person', async () => {
@@ -54,6 +81,48 @@ describe('task visibility', () => {
   it('shows nothing to anonymous visitors', async () => {
     await as(null);
     await expect(visibleTasks()).rejects.toThrow(/permission denied/);
+  });
+});
+
+describe('role hierarchy: see below, edit only your own', () => {
+  it('lets a higher role see but not edit a task of a role below it', async () => {
+    expect(await markDone(10, 'dev-heads@hasulam.test')).toBe(0);
+  });
+
+  it('lets the accountable department head edit a task owned by a role below it', async () => {
+    expect(await markDone(15, 'dev-kitchen@hasulam.test')).toBe(1);
+  });
+
+  it('lets every co-owner edit a shared task', async () => {
+    expect(await markDone(2, 'dev-kitchen@hasulam.test')).toBe(1);
+    expect(await markDone(19, 'dev-heads@hasulam.test')).toBe(1);
+  });
+
+  it('does not let a lower role see or edit its parent’s tasks', async () => {
+    expect(await markDone(10, 'dev-chef@hasulam.test')).toBe(0);
+  });
+
+  it('shows the hierarchy to members only and does not let them change it', async () => {
+    await as('dev-kitchen@hasulam.test');
+    const { rows } = await client.query<{ parent_role: string | null }>(`select parent_role from public.role_hierarchy where role = 'chef'`);
+    expect(rows[0]?.parent_role).toBe('kitchen');
+    await expect(client.query(`update public.role_hierarchy set parent_role = 'owner' where role = 'chef'`)).rejects.toThrow(/permission denied/);
+  });
+
+  it('hides the hierarchy from non-members and anonymous visitors', async () => {
+    await as(null);
+    await expect(client.query(`select 1 from public.role_hierarchy`)).rejects.toThrow(/permission denied/);
+  });
+
+  it('returns no hierarchy rows to a signed-in non-member', async () => {
+    await as('dev-outsider@hasulam.test');
+    expect((await client.query(`select 1 from public.role_hierarchy`)).rowCount).toBe(0);
+  });
+
+  it('requires an accountable role whenever a task has owners', async () => {
+    await expect(
+      client.query(`update public.tasks set accountable_role = null where event_id = 'dev-feast-1' and position = 10`),
+    ).rejects.toThrow(/tasks_accountable_set/);
   });
 });
 

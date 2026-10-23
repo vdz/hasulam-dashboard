@@ -143,30 +143,50 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
-                },"task_templates": {
+                },"role_hierarchy": {
                   Row: {
-                    "due_note": string | null,"due_offset_days": number | null,"event_type": Database["public"]['Enums']["event_type"],"id": string,"owner_role": Database["public"]['Enums']["role_key"] | null,"position": number,"title": string
+                    "is_default": boolean,"parent_role": Database["public"]['Enums']["role_key"] | null,"role": Database["public"]['Enums']["role_key"]
                   }
                   ComputedFields: never
                   Insert: {
-                    "due_note"?: string | null,"due_offset_days"?: number | null,"event_type": Database["public"]['Enums']["event_type"],"id"?: string,"owner_role"?: Database["public"]['Enums']["role_key"] | null,"position": number,"title": string
+                    "is_default"?: boolean,"parent_role"?: Database["public"]['Enums']["role_key"] | null,"role": Database["public"]['Enums']["role_key"]
                   }
                   Update: {
-                    "due_note"?: string | null,"due_offset_days"?: number | null,"event_type"?: Database["public"]['Enums']["event_type"],"id"?: string,"owner_role"?: Database["public"]['Enums']["role_key"] | null,"position"?: number,"title"?: string
+                    "is_default"?: boolean,"parent_role"?: Database["public"]['Enums']["role_key"] | null,"role"?: Database["public"]['Enums']["role_key"]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "role_hierarchy_parent_role_fkey"
+      columns: ["parent_role"]
+isOneToOne: false
+      referencedRelation: "role_hierarchy"
+      referencedColumns: ["role"]
+    }
+                  ]
+                },"task_templates": {
+                  Row: {
+                    "accountable_role": Database["public"]['Enums']["role_key"] | null,"due_note": string | null,"due_offset_days": number | null,"event_type": Database["public"]['Enums']["event_type"],"id": string,"owner_roles": (Database["public"]['Enums']["role_key"])[],"position": number,"title": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "accountable_role"?: Database["public"]['Enums']["role_key"] | null,"due_note"?: string | null,"due_offset_days"?: number | null,"event_type": Database["public"]['Enums']["event_type"],"id"?: string,"owner_roles"?: (Database["public"]['Enums']["role_key"])[],"position": number,"title": string
+                  }
+                  Update: {
+                    "accountable_role"?: Database["public"]['Enums']["role_key"] | null,"due_note"?: string | null,"due_offset_days"?: number | null,"event_type"?: Database["public"]['Enums']["event_type"],"id"?: string,"owner_roles"?: (Database["public"]['Enums']["role_key"])[],"position"?: number,"title"?: string
                   }
                   Relationships: [
                     
                   ]
                 },"tasks": {
                   Row: {
-                    "due_note": string | null,"due_offset_days": number | null,"event_id": string,"id": string,"notes": string | null,"owner_person_id": string | null,"owner_role": Database["public"]['Enums']["role_key"] | null,"position": number,"status": Database["public"]['Enums']["task_status"],"template_id": string | null,"title": string,"updated_at": string,"updated_by": string | null
+                    "accountable_role": Database["public"]['Enums']["role_key"] | null,"due_note": string | null,"due_offset_days": number | null,"event_id": string,"id": string,"notes": string | null,"owner_person_id": string | null,"owner_roles": (Database["public"]['Enums']["role_key"])[],"position": number,"status": Database["public"]['Enums']["task_status"],"template_id": string | null,"title": string,"updated_at": string,"updated_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "due_note"?: string | null,"due_offset_days"?: number | null,"event_id": string,"id"?: string,"notes"?: string | null,"owner_person_id"?: string | null,"owner_role"?: Database["public"]['Enums']["role_key"] | null,"position": number,"status"?: Database["public"]['Enums']["task_status"],"template_id"?: string | null,"title": string,"updated_at"?: string,"updated_by"?: string | null
+                    "accountable_role"?: Database["public"]['Enums']["role_key"] | null,"due_note"?: string | null,"due_offset_days"?: number | null,"event_id": string,"id"?: string,"notes"?: string | null,"owner_person_id"?: string | null,"owner_roles"?: (Database["public"]['Enums']["role_key"])[],"position": number,"status"?: Database["public"]['Enums']["task_status"],"template_id"?: string | null,"title": string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "due_note"?: string | null,"due_offset_days"?: number | null,"event_id"?: string,"id"?: string,"notes"?: string | null,"owner_person_id"?: string | null,"owner_role"?: Database["public"]['Enums']["role_key"] | null,"position"?: number,"status"?: Database["public"]['Enums']["task_status"],"template_id"?: string | null,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
+                    "accountable_role"?: Database["public"]['Enums']["role_key"] | null,"due_note"?: string | null,"due_offset_days"?: number | null,"event_id"?: string,"id"?: string,"notes"?: string | null,"owner_person_id"?: string | null,"owner_roles"?: (Database["public"]['Enums']["role_key"])[],"position"?: number,"status"?: Database["public"]['Enums']["task_status"],"template_id"?: string | null,"title"?: string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {

@@ -10,7 +10,8 @@ const taskRowSchema = z.object({
   title: z.string(),
   status: taskStatusSchema,
   position: z.number().int(),
-  owner_role: roleSchema.nullable(),
+  owner_roles: z.array(roleSchema),
+  accountable_role: roleSchema.nullable(),
   due_offset_days: z.number().int().nullable(),
   due_note: z.string().nullable(),
   event: z.object({ id: eventIdSchema, title: z.string(), starts_at: z.iso.datetime({ offset: true }) }),
@@ -21,25 +22,29 @@ export interface MyTask {
   title: string;
   status: TaskStatus;
   position: number;
-  ownerRole: Role | null;
+  ownerRoles: readonly Role[];
+  accountableRole: Role | null;
   dueOffsetDays: number | null;
   dueNote: string | null;
   eventTitle: string;
   eventStart: Date;
 }
 
-export async function listMyTasks(): Promise<MyTask[]> {
+/** Tasks the viewer does: their roles are among the owners. The owner sees every task. RLS is the real gate. */
+export async function listMyTasks(viewer: Viewer): Promise<MyTask[]> {
   const db = await dbClient();
-  const { data, error } = await db
+  const query = db
     .from('tasks')
-    .select('id, title, status, position, owner_role, due_offset_days, due_note, event:events!inner(id, title, starts_at)');
+    .select('id, title, status, position, owner_roles, accountable_role, due_offset_days, due_note, event:events!inner(id, title, starts_at)');
+  const { data, error } = viewer.roles.includes('owner') ? await query : await query.overlaps('owner_roles', [...viewer.roles]);
   if (error) throw new Error(`listing tasks failed: ${error.message}`);
   return z.array(taskRowSchema).parse(data).map((row) => ({
     id: row.id,
     title: row.title,
     status: row.status,
     position: row.position,
-    ownerRole: row.owner_role,
+    ownerRoles: row.owner_roles,
+    accountableRole: row.accountable_role,
     dueOffsetDays: row.due_offset_days,
     dueNote: row.due_note,
     eventTitle: row.event.title,
