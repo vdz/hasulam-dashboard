@@ -63,5 +63,6 @@ export const he = {
     women_team: 'צוות נשים',
     men_team: 'צוות גברים',
     calendar_keeper: 'שומר הלוח',
+    informed: 'מעודכנת',
   },
 } as const;

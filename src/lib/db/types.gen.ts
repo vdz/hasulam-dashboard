@@ -226,7 +226,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "cta_kind": "request_headcount"|"ask_rav_theme"|"request_invitation"|"remind_team"|"content_prompt"|"shopping_list"|"record_debrief","cta_status": "queued"|"drafted"|"awaiting_yehuda"|"sent"|"done"|"failed","draft_status": "pending_approval"|"approved"|"rejected"|"sent","event_type": "feast"|"shabbat"|"experiential_meeting"|"festive_lesson"|"trip"|"birthday","role_key": "owner"|"operating_heads"|"kitchen"|"invitations"|"content"|"rav_liaison"|"kids_dept"|"buyer"|"chef"|"women_team"|"men_team"|"calendar_keeper","task_status": "todo"|"done"|"na"
+            "cta_kind": "request_headcount"|"ask_rav_theme"|"request_invitation"|"remind_team"|"content_prompt"|"shopping_list"|"record_debrief","cta_status": "queued"|"drafted"|"awaiting_yehuda"|"sent"|"done"|"failed","draft_status": "pending_approval"|"approved"|"rejected"|"sent","event_type": "feast"|"shabbat"|"experiential_meeting"|"festive_lesson"|"trip"|"birthday","role_key": "owner"|"operating_heads"|"kitchen"|"invitations"|"content"|"rav_liaison"|"kids_dept"|"buyer"|"chef"|"women_team"|"men_team"|"calendar_keeper"|"informed","task_status": "todo"|"done"|"na"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -342,7 +342,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "cta_kind": ["request_headcount", "ask_rav_theme", "request_invitation", "remind_team", "content_prompt", "shopping_list", "record_debrief"],"cta_status": ["queued", "drafted", "awaiting_yehuda", "sent", "done", "failed"],"draft_status": ["pending_approval", "approved", "rejected", "sent"],"event_type": ["feast", "shabbat", "experiential_meeting", "festive_lesson", "trip", "birthday"],"role_key": ["owner", "operating_heads", "kitchen", "invitations", "content", "rav_liaison", "kids_dept", "buyer", "chef", "women_team", "men_team", "calendar_keeper"],"task_status": ["todo", "done", "na"]
+            "cta_kind": ["request_headcount", "ask_rav_theme", "request_invitation", "remind_team", "content_prompt", "shopping_list", "record_debrief"],"cta_status": ["queued", "drafted", "awaiting_yehuda", "sent", "done", "failed"],"draft_status": ["pending_approval", "approved", "rejected", "sent"],"event_type": ["feast", "shabbat", "experiential_meeting", "festive_lesson", "trip", "birthday"],"role_key": ["owner", "operating_heads", "kitchen", "invitations", "content", "rav_liaison", "kids_dept", "buyer", "chef", "women_team", "men_team", "calendar_keeper", "informed"],"task_status": ["todo", "done", "na"]
           }
         }
 } as const
