@@ -43,7 +43,7 @@ e2e/                   Playwright smoke
 | Stakeholders see/mark only their role's tasks; owner sees all | RLS + column grants, `supabase/tests/rls.test.ts` |
 | One `requireRole()` gate for pages and actions | `src/lib/db/viewer.ts` |
 | Outbound messages are Draft rows; approval needs an approver | `drafts` grants + check constraint |
-| Dev login never in production | `src/env.ts` refuses `DEV_LOGIN_ENABLED` with `VERCEL_ENV=production` |
+| Google is the only sign-in; dev password login is local-only | `src/env.ts` refuses `DEV_LOGIN_ENABLED` with `VERCEL_ENV=production` or a `*.supabase.co` URL; setup in `docs/setup-google-and-vercel.md` |
 | No secrets in repo or client bundle; server env via `serverEnv()` only (see `docs/secrets.md`) | `.gitignore`, ESLint `no-restricted-syntax`, `import 'server-only'` in `src/env.ts`, `npm run secrets:check` |
 | Next 16 Cache Components: per-viewer data is never `'use cache'`; it streams inside `<Suspense>`; `dbClient()` calls `connection()` | `cacheComponents: true` (build fails on uncached data outside Suspense), `src/lib/db/client.ts` |
 | Never contact stakeholders without the owner's OK | no send path exists in code |

@@ -1,15 +1,36 @@
 import { text } from '@/assets/locales';
-import { devSignInAction } from '@/app/signin/actions';
+import { devSignInAction, googleSignInAction } from '@/app/signin/actions';
 import styles from './SignInForm.module.css';
 import type { SignInFormProps } from './types';
 
-export function SignInForm({ devLoginEnabled, notice }: SignInFormProps) {
+function GoogleMark() {
+  return (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48">
+      <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z" />
+      <path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 7l7.4 5.7c4.3-4 6.9-9.9 6.9-17.2z" />
+      <path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-2.9-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.1z" />
+      <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.8-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.4 2.3-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z" />
+    </svg>
+  );
+}
+
+export function SignInForm({ devLoginEnabled, notice, next }: SignInFormProps) {
   return (
     <main className={styles.page} data-testid="sign-in">
       <h1 className={styles.title} data-testid="sign-in-title">{text.signIn.title}</h1>
+      <p className={styles.lead}>{text.signIn.lead}</p>
       {notice !== null && <p className={styles.notice} data-testid="sign-in-notice" role="alert">{text.signIn[notice]}</p>}
-      {devLoginEnabled ? (
+      <form action={googleSignInAction}>
+        <input type="hidden" name="next" value={next} />
+        <button className={styles.google} data-testid="sign-in-google" type="submit">
+          <GoogleMark />
+          <span>{text.signIn.google}</span>
+        </button>
+      </form>
+      {devLoginEnabled && (
         <form className={styles.form} action={devSignInAction} data-testid="sign-in-dev-form">
+          <p className={styles.devLabel}>{text.signIn.devOnly}</p>
+          <input type="hidden" name="next" value={next} />
           <label className={styles.field}>
             {text.signIn.email}
             <input className={styles.input} data-testid="sign-in-email" name="email" type="email" required dir="ltr" />
@@ -20,8 +41,6 @@ export function SignInForm({ devLoginEnabled, notice }: SignInFormProps) {
           </label>
           <button className={styles.submit} data-testid="sign-in-submit" type="submit">{text.signIn.submit}</button>
         </form>
-      ) : (
-        <p className={styles.notice} data-testid="sign-in-google-soon">{text.signIn.googleSoon}</p>
       )}
     </main>
   );
