@@ -23,7 +23,15 @@ Supabase dashboard (project `kmdlmmokqaxaicwixnjr`), never in the repo:
 - `calendar_keeper` role password (see `docs/calendar-keeper-access.md`): set in the SQL editor, stored only on The Lab.
 - Service role key: not used by the app; if ever needed, server-only and added to `SERVER_SECRET_NAMES`.
 
-GitHub Actions secrets: none needed today. CI runs a throwaway local Supabase whose
+GitHub Actions secrets:
+- `KEEPALIVE_DB_PASSWORD`: password of the cloud login role `keepalive` (no grants beyond `connect`;
+  `statement_timeout` 5s, connection limit 2). Used only by `.github/workflows/keepalive.yml`, which runs
+  `select 1` every 2 days so the free-tier project never pauses. A copy lives only on The Lab
+  (`~/.secrets/hasulam-keepalive-db-password`). Rotate: `alter role keepalive password '...'` in the SQL editor,
+  then `gh secret set KEEPALIVE_DB_PASSWORD`. The publishable key was not used because it is not reachable
+  without the dashboard; this role is narrower anyway (it can read nothing).
+
+CI itself needs no secrets: it runs a throwaway local Supabase whose
 well-known `supabase start` demo keys are read at runtime, not hardcoded.
 
 Local-only, not secrets: `supabase/seed.sql` dev users (`*@hasulam.test`, `dev-password-*`) exist only

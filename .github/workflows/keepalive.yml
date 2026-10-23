@@ -1,0 +1,24 @@
+name: Supabase keepalive
+
+# Free-tier projects pause after ~7 days without activity. Every 2 days, open one
+# authenticated connection to the cloud project and run `select 1`.
+# Role `keepalive` is login-only: no schema, table or function grants (see docs/secrets.md).
+on:
+  schedule:
+    - cron: '17 6 */2 * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: select 1 on kmdlmmokqaxaicwixnjr
+        env:
+          PGPASSWORD: ${{ secrets.KEEPALIVE_DB_PASSWORD }}
+        run: |
+          out=$(psql "host=aws-1-eu-central-1.pooler.supabase.com port=5432 user=keepalive.kmdlmmokqaxaicwixnjr dbname=postgres sslmode=require connect_timeout=20" -Atc "select 1")
+          test "$out" = "1"
+          echo "keepalive ok at $(date -u +%FT%TZ)"
