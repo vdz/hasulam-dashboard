@@ -15,3 +15,6 @@ export type TaskStatus = z.infer<typeof taskStatusSchema>;
 export type EventType = z.infer<typeof eventTypeSchema>;
 export type CtaKind = z.infer<typeof ctaKindSchema>;
 export type CtaStatus = z.infer<typeof ctaStatusSchema>;
+
+/** Display order for role groups: the order of the role_key enum. */
+export const roleOrder: readonly Role[] = enums.role_key;

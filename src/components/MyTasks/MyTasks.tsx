@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { fill, text } from '@/assets/locales';
 import { signOutAction } from '@/app/signin/actions';
 import { TaskItem } from '@/components/TaskItem';
@@ -9,6 +10,7 @@ export function MyTasks({ viewerName, tasks }: MyTasksProps) {
     <main className={styles.page} data-testid="my-tasks">
       <header className={styles.header}>
         <div>
+          <Link className={styles.navLink} href="/events" data-testid="nav-events">{text.nav.events}</Link>
           <h1 className={styles.title} data-testid="my-tasks-title">{text.myTasks.title}</h1>
           <p className={styles.greeting} data-testid="my-tasks-greeting">{fill(text.myTasks.greeting, { name: viewerName })}</p>
         </div>
@@ -21,7 +23,7 @@ export function MyTasks({ viewerName, tasks }: MyTasksProps) {
       ) : (
         <ul className={styles.list} data-testid="my-tasks-list">
           {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
+            <TaskItem key={task.id} task={task} context={task.eventTitle} editable />
           ))}
         </ul>
       )}

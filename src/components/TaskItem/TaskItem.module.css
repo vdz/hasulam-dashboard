@@ -7,3 +7,4 @@
 .item[data-status='done'] .title { text-decoration: line-through; color: var(--color-muted); }
 .toggle { min-height: var(--tap); width: 100%; border: 0; border-radius: var(--radius); background: var(--color-accent); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer; }
 .toggle[data-next='todo'] { background: var(--color-surface); color: var(--color-accent); border: 1px solid var(--color-accent); }
+.readOnly { align-self: flex-start; font-size: 14px; color: var(--color-muted); }
